@@ -35,7 +35,7 @@ int main( void )
     cria_lista( &l );
     while( 1 ){
          printf( "\n /----------------------------------------------------/" ); 
-         printf( "\n Programa de cadastro - Menu                           " );
+         printf( "\n Teste2 do Ronaldo                                     " );
          printf( "\n [1]   Cria lista                                      " );
          printf( "\n [2]   Inclui registro no final da lista               " );
          printf( "\n [3]   Inclui registro no inicio da lista              " );
