@@ -14,6 +14,7 @@ struct topdez{
 typedef struct list {
        char faixas[30];
        char matrizDeFaixas[10][30];
+	   int  code;
        char titulo[30];
        char cantor[30];
        struct list* prox;	// ponteiro para o próximo registro
@@ -22,6 +23,7 @@ typedef struct list {
 void    entrada_dados  ( CD* aux ); // leitura dos dados de entrada
 void    cria_lista     ( CD** cd ); // inicia a lista
 void    incluir_cd     ( CD** cd );
+CD*     procura_nodo   ( CD* cd, int code );
 
 int main(void){
 	setlocale(LC_ALL, "Portuguese");
@@ -75,6 +77,10 @@ void cria_lista( CD** l ){
 }
 
 void entrada_dados( CD* aux ){
+	printf( "\n\n Digite o código do CD: " ); 
+    fflush( stdin );     // limpa buffer do teclado, funciona junto com entrada de dados
+    scanf("%d", &aux->code);
+	
 	printf( "\n\n Digite a Título do CD: " ); 
     fflush( stdin );     // limpa buffer do teclado, funciona junto com entrada de dados
     scanf("%d", &aux->titulo);
@@ -113,6 +119,11 @@ void incluir_cd( CD** cd ){
         printf( "\n Lista cheia!" );
 }
 
+CD* procura_nodo( CD* p, int code ){ 
+    while( ( p->code != code ) && ( p->prox != NULL ))// anda pela lista até o final ou até encontrar codigo desejado
+             p = p->prox;                                   // passa para o proximo
+    return p; // nodo de referencia
+}
 
 
 
