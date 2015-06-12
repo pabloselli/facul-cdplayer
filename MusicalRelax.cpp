@@ -5,16 +5,16 @@
 #include <locale.h>
 #define numeroDeMusicas 2
 // Registro para as faixas
-typedef struct topdez{
+typedef struct topdez {
        int quantidade;
        char nome[30];
        struct topdez* prox;
 }FAIXA;
 
 typedef struct list {
+	   int  code;
        char faixas[30];
        char matrizDeFaixas[10][30];
-	   int  code;
        char titulo[30];
        char cantor[30];
        struct list* prox;	// ponteiro para o próximo registro
@@ -23,17 +23,17 @@ typedef struct list {
 void    entrada_dados  ( CD* aux ); // leitura dos dados de entrada
 void    cria_lista     ( CD** cd ); // inicia a lista
 void    incluir_cd     ( CD** cd );
+void    exclui_cd      ( CD** cd ); // exclui
 CD*     procura_nodo   ( CD* cd, int code );
 void    escolher_musica(CD** aux, FAIXA** top);
-
+CD*     procura_nodo   ( CD* cd, int code );
 void    mostrar_cds    ( CD* aux ); // visualizacao da lista em tela
-
 
 void verSeCadastrou (CD* aux);
 
+
 int main(void){
 	setlocale(LC_ALL, "Portuguese");
-	
 	int op;
 	CD* cd;
 	CD* topTen;
@@ -57,13 +57,13 @@ int main(void){
 				incluir_cd( &cd );
 				break;
 			case 2:
-				//Excluir
+				exclui_cd( &cd );
 				break;
 			case 3:
-				verSeCadastrou ( cd );
+				verSeCadastrou( cd );
 				break;
 			case 4:
-				//Mostrar cds
+				mostrar_cds( cd );
 				break;
 			case 5:
 				//Mostar top 10
@@ -78,24 +78,25 @@ int main(void){
 	}
 }
 
-void cria_lista( CD** l ){
-    *l = NULL;
+void cria_lista( CD** cd ){
+    *cd = NULL;
 }
 
 void entrada_dados( CD* aux ){
-	printf( "Digite o código do CD: " ); 
+	printf( "\n Digite o código do CD:   " ); 
     fflush( stdin );     // limpa buffer do teclado, funciona junto com entrada de dados
     scanf("%d", &aux->code);
 	
-	printf( "Digite a Título do CD: " ); 
+	printf( " Digite o título do CD:   " ); 
     fflush( stdin );     // limpa buffer do teclado, funciona junto com entrada de dados
     scanf("%d", &aux->titulo);
 
-    printf( "Digite o nome do cantor: " );
+    printf( " Digite o nome do cantor: " );
     fflush( stdin );     // limpa buffer do teclado, funciona junto com entrada de dados
-    gets( aux->cantor );    
+    gets( aux->cantor );
+	printf("\n");    
     for(int i = 0;i<=numeroDeMusicas;i++){
-		printf("Título da faixa:");
+		printf("  Título da faixa: ");
 		gets(aux->faixas);
 		strcpy(aux->matrizDeFaixas[i],aux->faixas);
 	}
@@ -118,11 +119,11 @@ void incluir_cd( CD** cd ){
                   while( p->prox != NULL )
                         p = p->prox;
                   p->prox = no;                  // ultimo aponta para o novo registro
-                  printf( "\n Registro incluido!" );                  
-                  }
-        }
+                  printf( "\n CD incluído. Let's Play!!" );                  
+             }
+    }
     else
-        printf( "\n Lista cheia!" );
+        printf( "\n Não há espaço disponível!" );
 }
 
 CD* procura_nodo( CD* p, int code ){ 
@@ -132,42 +133,55 @@ CD* procura_nodo( CD* p, int code ){
 }
 
 void verSeCadastrou (CD* aux){
-	if(aux==NULL){
-		printf("\nNada");
-	}else{
-		printf("\n Não esta vazio");
-	}
+    if(aux==NULL){
+        printf("\nNada");
+    }else{
+        printf("\n Não esta vazio");
+    }
 }
 
 void mostrar_cds  ( CD* aux ){
       if( aux == NULL )
         printf( "\n Lista vazia!" );
-	else {
-	     printf("\n\n ---- Lista De Musicas ---- ");
+    else {
+         printf("\n\n ---- Lista De Musicas ---- ");
          while( aux != NULL ){    // ponteiro auxiliar para a lista
                 printf( "\n Titulo..: %s", aux->titulo );
                 printf( "\n Cantor: %s", aux->cantor );
                 printf( "\n Faixa: %s", aux->faixas );
                 aux = aux->prox;  // aponta para o proximo registro da lista
-		 } // fim while( aux != NULL )
-	} // fim if( aux == NULL )	
-	
-	
+         } // fim while( aux != NULL )
+    } // fim if( aux == NULL )  
+    
+    
 }
 
+void exclui_cd( CD** cd ){
+    int cod;      // codigo a ser excluido 
+    CD* aux;     // ponteiro auxiliar para percorrer a lista 
+    CD* no;    // ponteiro auxiliar para a codigo de referencia
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    printf("\nCódigo do CD: ");
+    fflush( stdin );                        // limpa buffer do teclado e faz a entrada de dados
+    scanf( "%d", &cod );              
+    if( *cd != NULL ){                       // verifica se a lista esta vazia 
+        no = procura_nodo( *cd, cod );       // procura codigo de referencia, a ser excluida
+        if(( cod == no->code) && ( no != NULL )){ // verifica se encontrou a codigo na lista
+            aux = *cd;                         // ponteiro auxiliar aponta para o inicio da lista
+            if( aux == no )                   // verifica se o registro apontado pelo auxiliar e o registro que sera excluido
+                *cd = aux->prox;               // faz o inicio da lista apontar para o proximo registro, visto que o primeiro sera excluido
+            else {
+                 while( aux->prox != no )     // procura registro anterior ao que sera excluido
+                        aux = aux->prox;
+                 aux->prox = no->prox;        // faz o registro anterior apontar para um registro após o excluido - para onde este esta apontando
+        	}
+             free( no ); // libera o espaco de memoria que estava sendo ocupado pelo registro que foi excluido
+             printf( "\n CD excluído do CD-Player!" );
+        } 
+        else
+             printf("\nCD não encontrado, por favor, digite um novo código!");
+    }  
+    else
+        printf("\nNão há CD's disponíveis. Por favor, cadastre um novo CD!");
+}
+    
