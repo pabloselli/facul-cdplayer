@@ -25,12 +25,10 @@ void    cria_lista     ( CD** cd ); // inicia a lista
 void    incluir_cd     ( CD** cd );
 void    exclui_cd      ( CD** cd ); // exclui
 CD*     procura_nodo   ( CD* cd, int code );
-void    escolher_musica(CD** aux, FAIXA** top);
+void    escolher_musica( CD** aux, FAIXA** top);
 CD*     procura_nodo   ( CD* cd, int code );
 void    mostrar_cds    ( CD* aux ); // visualizacao da lista em tela
-
-void verSeCadastrou (CD* aux);
-
+void    verSeCadastrou ( CD* aux );
 
 int main(void){
 	setlocale(LC_ALL, "Portuguese");
@@ -141,6 +139,7 @@ void verSeCadastrou (CD* aux){
 }
 
 void mostrar_cds  ( CD* aux ){
+	fflush( stdin );
       if( aux == NULL )
         printf( "\n Lista vazia!" );
     else {
@@ -150,10 +149,9 @@ void mostrar_cds  ( CD* aux ){
                 printf( "\n Cantor: %s", aux->cantor );
                 printf( "\n Faixa: %s", aux->faixas );
                 aux = aux->prox;  // aponta para o proximo registro da lista
-         } // fim while( aux != NULL )
-    } // fim if( aux == NULL )  
-    
-    
+         }
+    }
+    getchar();
 }
 
 void exclui_cd( CD** cd ){
