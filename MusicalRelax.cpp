@@ -5,10 +5,10 @@
 #include <locale.h>
 #define numeroDeMusicas 2
 // Registro para as faixas
-struct topdez{
+typedef struct topdez{
        int quantidade;
        char nome[30];
-       struct FAIXA* prox;
+       struct topdez* prox;
 }FAIXA;
 
 typedef struct list {
@@ -24,6 +24,12 @@ void    entrada_dados  ( CD* aux ); // leitura dos dados de entrada
 void    cria_lista     ( CD** cd ); // inicia a lista
 void    incluir_cd     ( CD** cd );
 CD*     procura_nodo   ( CD* cd, int code );
+void    escolher_musica(CD** aux, FAIXA** top);
+
+void    mostrar_cds    ( CD* aux ); // visualizacao da lista em tela
+
+
+void verSeCadastrou (CD* aux);
 
 int main(void){
 	setlocale(LC_ALL, "Portuguese");
@@ -54,7 +60,7 @@ int main(void){
 				//Excluir
 				break;
 			case 3:
-				//Escutar
+				verSeCadastrou ( cd );
 				break;
 			case 4:
 				//Mostrar cds
@@ -66,7 +72,7 @@ int main(void){
 				exit(1);
 				break;
 			default:
-				printf("Opção invárlida");
+				printf("Opção inválida");
 				break;
 		}
 	}
@@ -77,15 +83,15 @@ void cria_lista( CD** l ){
 }
 
 void entrada_dados( CD* aux ){
-	printf( "\n\n Digite o código do CD: " ); 
+	printf( "Digite o código do CD: " ); 
     fflush( stdin );     // limpa buffer do teclado, funciona junto com entrada de dados
     scanf("%d", &aux->code);
 	
-	printf( "\n\n Digite a Título do CD: " ); 
+	printf( "Digite a Título do CD: " ); 
     fflush( stdin );     // limpa buffer do teclado, funciona junto com entrada de dados
     scanf("%d", &aux->titulo);
 
-    printf( "\n Digite o nome do cantor: " );
+    printf( "Digite o nome do cantor: " );
     fflush( stdin );     // limpa buffer do teclado, funciona junto com entrada de dados
     gets( aux->cantor );    
     for(int i = 0;i<=numeroDeMusicas;i++){
@@ -125,6 +131,29 @@ CD* procura_nodo( CD* p, int code ){
     return p; // nodo de referencia
 }
 
+void verSeCadastrou (CD* aux){
+	if(aux==NULL){
+		printf("\nNada");
+	}else{
+		printf("\n Não esta vazio");
+	}
+}
+
+void mostrar_cds  ( CD* aux ){
+      if( aux == NULL )
+        printf( "\n Lista vazia!" );
+	else {
+	     printf("\n\n ---- Lista De Musicas ---- ");
+         while( aux != NULL ){    // ponteiro auxiliar para a lista
+                printf( "\n Titulo..: %s", aux->titulo );
+                printf( "\n Cantor: %s", aux->cantor );
+                printf( "\n Faixa: %s", aux->faixas );
+                aux = aux->prox;  // aponta para o proximo registro da lista
+		 } // fim while( aux != NULL )
+	} // fim if( aux == NULL )	
+	
+	
+}
 
 
 
