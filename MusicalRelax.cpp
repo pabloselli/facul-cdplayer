@@ -87,7 +87,7 @@ void entrada_dados( CD* aux ){
 	
 	printf( " Digite o título do CD:   " ); 
     fflush( stdin );     // limpa buffer do teclado, funciona junto com entrada de dados
-    scanf("%d", &aux->titulo);
+    gets(aux->titulo);
 
     printf( " Digite o nome do cantor: " );
     fflush( stdin );     // limpa buffer do teclado, funciona junto com entrada de dados
