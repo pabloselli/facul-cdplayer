@@ -6,7 +6,8 @@
 #define numeroDeMusicas 2
 // Registro para as faixas
 typedef struct topdez {
-       int quantidade;
+       int codigo;
+	   int quantidade;
        char nome[30];
        struct topdez* prox;
 }FAIXA;
@@ -15,6 +16,7 @@ typedef struct list {
 	   int  code;
        char faixas[30];
        char matrizDeFaixas[10][30];
+       char quantidadeTocadas[10];
        char titulo[30];
        char cantor[30];
        struct list* prox;	// ponteiro para o próximo registro
@@ -28,7 +30,6 @@ CD*     procura_nodo   ( CD* cd, int code );
 void    escolher_musica( CD** aux, FAIXA** top);
 CD*     procura_nodo   ( CD* cd, int code );
 void    mostrar_cds    ( CD* aux ); // visualizacao da lista em tela
-void    verSeCadastrou ( CD* aux );
 
 int main(void){
 	setlocale(LC_ALL, "Portuguese");
@@ -58,7 +59,7 @@ int main(void){
 				exclui_cd( &cd );
 				break;
 			case 3:
-				verSeCadastrou( cd );
+				//verSeCadastrou( cd );
 				break;
 			case 4:
 				mostrar_cds( cd );
@@ -92,9 +93,9 @@ void entrada_dados( CD* aux ){
     printf( " Digite o nome do cantor: " );
     fflush( stdin );     // limpa buffer do teclado, funciona junto com entrada de dados
     gets( aux->cantor );
-	printf("\n");    
+	printf("\n");
     for(int i = 0;i<=numeroDeMusicas;i++){
-		printf("  Título da faixa: ");
+		printf("Título da faixa %d: ",i+1);
 		gets(aux->faixas);
 		strcpy(aux->matrizDeFaixas[i],aux->faixas);
 	}
@@ -130,14 +131,6 @@ CD* procura_nodo( CD* p, int code ){
     return p; // nodo de referencia
 }
 
-void verSeCadastrou (CD* aux){
-    if(aux==NULL){
-        printf("\nNada");
-    }else{
-        printf("\n Não esta vazio");
-    }
-}
-
 void mostrar_cds  ( CD* aux ){
 	fflush( stdin );
       if( aux == NULL )
@@ -147,7 +140,9 @@ void mostrar_cds  ( CD* aux ){
          while( aux != NULL ){    // ponteiro auxiliar para a lista
                 printf( "\n Titulo..: %s", aux->titulo );
                 printf( "\n Cantor: %s", aux->cantor );
-                printf( "\n Faixa: %s", aux->faixas );
+				for(int j=0;j<=numeroDeMusicas;j++){
+					printf( "\n Faixa: %s", aux->matrizDeFaixas[j] );
+				}
                 aux = aux->prox;  // aponta para o proximo registro da lista
          }
     }
