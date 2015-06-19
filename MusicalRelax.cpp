@@ -27,9 +27,11 @@ void    cria_lista     ( CD** cd ); // inicia a lista
 void    incluir_cd     ( CD** cd );
 void    exclui_cd      ( CD** cd ); // exclui
 CD*     procura_nodo   ( CD* cd, int code );
-void    escolher_musica( CD** aux, FAIXA** top);
+void    escolher_musica( CD** cd);
 CD*     procura_nodo   ( CD* cd, int code );
 void    mostrar_cds    ( CD* aux ); // visualizacao da lista em tela
+void	primeira_escolha( CD aux );
+void	segunda_escolha( CD aux );
 
 int main(void){
 	setlocale(LC_ALL, "Portuguese");
@@ -38,6 +40,14 @@ int main(void){
 	CD* topTen;
 	cria_lista(&cd);
 	cria_lista(&topTen);
+	
+	/*
+		
+		Escolher uma música("já tem")
+			cadastrar no TOP10(inclui ordenado)
+		mostrar e tocar TOP10("já tem")
+	
+	*/
 	
 	while(1){
 		system("cls");
@@ -60,6 +70,7 @@ int main(void){
 				break;
 			case 3:
 				//verSeCadastrou( cd );
+				escolher_musica( &cd);
 				break;
 			case 4:
 				mostrar_cds( cd );
@@ -140,12 +151,36 @@ void mostrar_cds  ( CD* aux ){
          while( aux != NULL ){    // ponteiro auxiliar para a lista
                 printf( "\n Titulo..: %s", aux->titulo );
                 printf( "\n Cantor: %s", aux->cantor );
-				for(int j=0;j<=numeroDeMusicas;j++){
+				for(int j=1;j<=numeroDeMusicas;j++){
 					printf( "\n Faixa: %s", aux->matrizDeFaixas[j] );
 				}
                 aux = aux->prox;  // aponta para o proximo registro da lista
          }
     }
+    getchar();
+}
+
+void primeira_escolha( CD* aux ){
+	fflush( stdin );
+      if( aux == NULL )
+        printf( "\n Lista vazia!" );
+    else {
+         printf("\n\n ---- Lista De CDs ---- ");
+         while( aux != NULL ){    // ponteiro auxiliar para a lista
+         		printf(" \n Código: %s",aux->code);
+                printf( "\n Titulo..: %s", aux->titulo );
+                printf( "\n Cantor: %s", aux->cantor );
+         }
+    }
+    getchar();
+}
+
+void segunda_escolha( CD* aux ){
+	fflush( stdin );
+    printf("\n\n ---- Lista De Musicas ---- ");
+	for(int j=1;j<=numeroDeMusicas;j++){
+		printf( "\n Faixa: %s", aux->matrizDeFaixas[j] );
+	}
     getchar();
 }
 
@@ -176,5 +211,51 @@ void exclui_cd( CD** cd ){
     }  
     else
         printf("\nNão há CD's disponíveis. Por favor, cadastre um novo CD!");
+	getchar();
 }
-    
+
+void escolher_musica( CD** cd){
+/*	
+	int cod;
+	CD* no;
+
+	primeira_escolha(*cd);
+	printf("Qual o código do cd: ");
+	scanf("%d",&cod);
+	no = procura_nodo(cd,cod);
+	if(no != NULL){
+		segunda_escolha(no);
+		printf("Digite a posição da faixa:");
+		scanf(&cod);
+		if(cod<=numeroDeMusicas){
+			printf("Tocando musica...");
+			printf( "\n Faixa: %s", no->matrizDeFaixas[cod]);
+		}else
+			printf("Álbum não contem esta faixa");
+	}else
+		printf("CD não encontrado");
+		*/
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
