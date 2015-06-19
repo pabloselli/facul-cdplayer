@@ -176,5 +176,6 @@ void exclui_cd( CD** cd ){
     }  
     else
         printf("\nNão há CD's disponíveis. Por favor, cadastre um novo CD!");
+	getchar();
 }
     
