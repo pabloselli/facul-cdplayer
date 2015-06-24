@@ -151,7 +151,7 @@ void mostrar_cds  ( CD* aux ){
          while( aux != NULL ){    // ponteiro auxiliar para a lista
                 printf( "\n Titulo..: %s", aux->titulo );
                 printf( "\n Cantor: %s", aux->cantor );
-				for(int j=1;j<=numeroDeMusicas;j++){
+				for(int j=0;j<=numeroDeMusicas;j++){
 					printf( "\n Faixa: %s", aux->matrizDeFaixas[j] );
 				}
                 aux = aux->prox;  // aponta para o proximo registro da lista
@@ -162,23 +162,24 @@ void mostrar_cds  ( CD* aux ){
 
 void primeira_escolha( CD* aux ){
 	fflush( stdin );
-      if( aux == NULL )
-        printf( "\n Lista vazia!" );
-    else {
-         printf("\n\n ---- Lista De CDs ---- ");
-         while( aux != NULL ){    // ponteiro auxiliar para a lista
-         		printf(" \n Código: %s",aux->code);
-                printf( "\n Titulo..: %s", aux->titulo );
-                printf( "\n Cantor: %s", aux->cantor );
-         }
-    }
+	if( aux == NULL )
+		printf( "\n Lista vazia!" );
+	else {
+		printf("\n\n ---- Lista De CDs ---- ");
+		while( aux != NULL ){    // ponteiro auxiliar para a lista
+			printf(" \n Código: %d",aux->code);
+			printf( "\n Titulo..: %s", aux->titulo );
+			printf( "\n Cantor: %s", aux->cantor );
+			aux = aux->prox;
+		}
+	}
     getchar();
 }
 
 void segunda_escolha( CD* aux ){
 	fflush( stdin );
     printf("\n\n ---- Lista De Musicas ---- ");
-	for(int j=1;j<=numeroDeMusicas;j++){
+	for(int j=0;j<=numeroDeMusicas;j++){
 		printf( "\n Faixa: %s", aux->matrizDeFaixas[j] );
 	}
     getchar();
@@ -215,26 +216,27 @@ void exclui_cd( CD** cd ){
 }
 
 void escolher_musica( CD** cd){
-/*	
-	int cod;
+	
+	int cod,val;
 	CD* no;
-
+	
 	primeira_escolha(*cd);
-	printf("Qual o código do cd: ");
+	printf("\nQual o código do cd: ");
 	scanf("%d",&cod);
-	no = procura_nodo(cd,cod);
+	no = procura_nodo(*cd,cod);
 	if(no != NULL){
-		segunda_escolha(no);
+		segunda_escolha(*cd);
 		printf("Digite a posição da faixa:");
-		scanf(&cod);
-		if(cod<=numeroDeMusicas){
+		scanf("%d",&cod);
+		val = cod-1;
+		if(val<=numeroDeMusicas && val>=0){
 			printf("Tocando musica...");
-			printf( "\n Faixa: %s", no->matrizDeFaixas[cod]);
+			printf( "\n Faixa: %s", no->matrizDeFaixas[val]);
 		}else
 			printf("Álbum não contem esta faixa");
 	}else
 		printf("CD não encontrado");
-		*/
+	getch();
 }
 
 
