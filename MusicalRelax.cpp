@@ -233,7 +233,7 @@ void inclui_ordenado( FAIXA** top,char nome[255] )
 */
     FAIXA* no =  ( FAIXA * ) malloc ( sizeof( FAIXA ) ); // aloca novo espaco em memoria
     if( no != NULL ){                                    // verifica se conseguiu alocar memoria para o novo registro
-			strcpy(no->nome,"teste");
+			strcpy(no->nome,nome);
 			no->quantidade++;
             p = *top;                                      // possiciona ponteiro auxiliar no inicio para percorrer a lista 
 			
@@ -271,15 +271,17 @@ void escolher_musica( CD** cd,FAIXA** top){
 		if(val<=numeroDeMusicas && val>=0){
 			printf("Tocando musica...");
 			printf( "\n Faixa: %s", no->matrizDeFaixas[val]);
-			strcpy(nomeFaixa,no->titulo);
-			strcpy(nomeFaixa," - ");
-			strcpy(nomeFaixa,no->matrizDeFaixas[val]);
+			strcat(nomeFaixa,no->titulo);
+			strcat(nomeFaixa," - ");
+			strcat(nomeFaixa,no->matrizDeFaixas[val]);
+			
+			printf("\nNome faixa: %s\n",nomeFaixa);
 			
 			if(top == NULL){
-				strcpy(top->nome,nomeFaixa);
-				top->quantidade = 1;
+				strcpy((*top)->nome,nomeFaixa);
+				(*top)->quantidade = 1;
 			}else{
-				inclui_ordenado(&top,nomeFaixa);
+				inclui_ordenado(top,nomeFaixa);
 			}
 		}else
 			printf("Álbum não contem esta faixa");
