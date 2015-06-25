@@ -35,6 +35,7 @@ void    mostrar_cds    ( CD* aux ); // visualizacao da lista em tela
 void	primeira_escolha( CD aux );
 void	segunda_escolha( CD aux );
 void    inclui_ordenado( FAIXA** top,char nome );
+void	mostrar_top	   (FAIXA* top);
 
 int main(void){
 	setlocale(LC_ALL, "Portuguese");
@@ -71,7 +72,7 @@ int main(void){
 				mostrar_cds( cd );
 				break;
 			case 5:
-				//Mostar top 10
+				mostrar_top( topdez );
 				break;
 			case 0:
 				exit(1);
@@ -264,7 +265,7 @@ void escolher_musica( CD** cd,FAIXA** top){
 	scanf("%d",&cod);
 	no = procura_nodo(*cd,cod);
 	if(no != NULL){
-		segunda_escolha(*cd);
+		segunda_escolha(*no);
 		printf("Digite a posição da faixa:");
 		scanf("%d",&cod);
 		val = cod-1;
@@ -290,7 +291,20 @@ void escolher_musica( CD** cd,FAIXA** top){
 	getch();
 }
 
-
+void mostrar_top  ( FAIXA* top ){			//Função para mostrar todos os cds e as faixas
+	fflush( stdin );
+      if( top == NULL )					//Se for vazia, imprime lista vazia
+        printf( "\n Lista vazia!" );
+    else {
+         printf("\n\n ---- TOP DEZ  ---- ");
+         while( top != NULL ){    // ponteiro auxiliar para a lista
+                printf( "\n Titulo..: %s", top->nome);  //Mostra o título da música
+				
+                top = top->prox;  // aponta para o proximo registro da lista
+         }
+    }
+    getchar();
+}
 
 
 
