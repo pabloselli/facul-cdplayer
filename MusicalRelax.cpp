@@ -25,7 +25,7 @@ typedef struct list {
 
 void    entrada_dados  ( CD* aux ); // leitura dos dados de entrada
 void    cria_lista     ( CD** cd ); // inicia a lista
-void    cria_topdez( FAIXA** topdez );
+void    cria_topdez	   ( FAIXA** top );
 void    incluir_cd     ( CD** cd );
 void    exclui_cd      ( CD** cd ); // exclui
 CD*     procura_nodo   ( CD* cd, int code );
@@ -88,8 +88,8 @@ void cria_lista( CD** cd ){
     *cd = NULL;
 }
 //cria a lista top dez
-void cria_topdez( FAIXA** topdez ){
-    *topdez = NULL;
+void cria_topdez( FAIXA** top ){
+    *top = NULL;
 }
 
 //Entra os dados do cd e das músicas
@@ -143,6 +143,11 @@ CD* procura_nodo( CD* p, int code ){
     return p; // nodo de referencia
 }
 
+FAIXA* procura_nodo_faixa( FAIXA* p, char nomeFaixa[255] ){ 
+    while( strcmp( p->nome, nomeFaixa )!=0 && ( p->prox != NULL ))// anda pela lista até o final ou até encontrar codigo desejado
+             p = p->prox;                                   // passa para o proximo
+    return p; // nodo de referencia
+}
 void mostrar_cds  ( CD* aux ){			//Função para mostrar todos os cds e as faixas
 	fflush( stdin );
       if( aux == NULL )					//Se for vazia, imprime lista vazia
@@ -224,6 +229,7 @@ void exclui_cd( CD** cd ){
 
 void inclui_ordenado( FAIXA** top,char nome[255] )
 {
+	FAIXA* f;
     FAIXA* p; 
     FAIXA* ant;           // ponteiros auxiliares para percorrer a lista 
 /*
@@ -233,7 +239,10 @@ void inclui_ordenado( FAIXA** top,char nome[255] )
    struct topdez* prox;
 */
     FAIXA* no =  ( FAIXA * ) malloc ( sizeof( FAIXA ) ); // aloca novo espaco em memoria
-    if( no != NULL ){                                    // verifica se conseguiu alocar memoria para o novo registro
+    if( no != NULL ){  
+			f = procura_nodo_faixa( *top, nome );                                  // verifica se conseguiu alocar memoria para o novo registro
+			if(f == NULL){
+			
 			strcpy(no->nome,nome);
 			no->quantidade++;
             p = *top;                                      // possiciona ponteiro auxiliar no inicio para percorrer a lista 
@@ -248,9 +257,12 @@ void inclui_ordenado( FAIXA** top,char nome[255] )
             else   
                 ant->prox = no;// ajuste de ponteiro para inserir na posicao ordenada
             no->prox = p;      // ajuste de ponteiro, inserido de forma ordenada por codigo
-    } // fim if( no != NULL )
-    else
+    	}else{
+    		f->quantidade++;
+	} 		
+    
     	printf("Não tem mais memória.");
+}
 }
 
 void escolher_musica( CD** cd,FAIXA** top){
@@ -265,7 +277,7 @@ void escolher_musica( CD** cd,FAIXA** top){
 	scanf("%d",&cod);
 	no = procura_nodo(*cd,cod);
 	if(no != NULL){
-		segunda_escolha(*no);
+		segunda_escolha(no);
 		printf("Digite a posição da faixa:");
 		scanf("%d",&cod);
 		val = cod-1;
@@ -282,7 +294,7 @@ void escolher_musica( CD** cd,FAIXA** top){
 				strcpy((*top)->nome,nomeFaixa);
 				(*top)->quantidade = 1;
 			}else{
-				inclui_ordenado(top,nomeFaixa);
+			//	inclui_ordenado(top,nomeFaixa);
 			}
 		}else
 			printf("Álbum não contem esta faixa");
@@ -298,7 +310,8 @@ void mostrar_top  ( FAIXA* top ){			//Função para mostrar todos os cds e as faix
     else {
          printf("\n\n ---- TOP DEZ  ---- ");
          while( top != NULL ){    // ponteiro auxiliar para a lista
-                printf( "\n Titulo..: %s", top->nome);  //Mostra o título da música
+                printf( "\n Titulo..: %s", top->nome);
+				printf("Quantidade %d", top->quantidade);  //Mostra o título da música
 				
                 top = top->prox;  // aponta para o proximo registro da lista
          }
