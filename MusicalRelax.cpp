@@ -143,22 +143,29 @@ CD* procura_nodo( CD* p, int code ){
     return p; // nodo de referencia
 }
 
+FAIXA* procura_nodo_faixa( FAIXA* p, char nome[255] ){ 
+    while( strcmp(p->nome,nome)!= 0 && p->prox != NULL) // anda pela lista até o final ou até encontrar codigo desejado
+        p = p->prox;                                    // passa para o proximo
+    return p; // nodo de referencia
+}
+
+
 void mostrar_cds  ( CD* aux ){			//Função para mostrar todos os cds e as faixas
 	fflush( stdin );
-      if( aux == NULL )					//Se for vazia, imprime lista vazia
-        printf( "\n Lista vazia!" );
-    else {
-         printf("\n\n ---- Lista De Musicas ---- ");
-         while( aux != NULL ){    // ponteiro auxiliar para a lista
-                printf( "\n Titulo..: %s", aux->titulo );  //Mostra o título da música
-                printf( "\n Cantor: %s", aux->cantor );    //Mostra o cantor do cd
-				for(int j=0;j<=numeroDeMusicas;j++){ //Itera as faixas
-					printf( "\n Faixa: %s", aux->matrizDeFaixas[j] ); 
-				}
-                aux = aux->prox;  // aponta para o proximo registro da lista
-         }
-    }
-    getchar();
+	if( aux == NULL )					//Se for vazia, imprime lista vazia
+		printf( "\n Lista vazia!" );
+	else {
+		printf("\n\n ---- Lista De Musicas ---- ");
+		while( aux != NULL ){    // ponteiro auxiliar para a lista
+			printf( "\n Titulo..: %s", aux->titulo );  //Mostra o título da música
+			printf( "\n Cantor: %s", aux->cantor );    //Mostra o cantor do cd
+			for(int j=0;j<=numeroDeMusicas;j++){ //Itera as faixas
+				printf( "\n Faixa: %s", aux->matrizDeFaixas[j] ); 
+			}
+			aux = aux->prox;  // aponta para o proximo registro da lista
+		}
+	}
+	getchar();
 }
 //Lista os cds
 void primeira_escolha( CD* aux ){
@@ -216,41 +223,26 @@ void exclui_cd( CD** cd ){
 	getchar();
 }
 
-/*
-	int quantidade;
-	char nome[30];
-	struct topdez* prox;
-*/
-
-void inclui_ordenado( FAIXA** top,char nome[255] )
+void inclui_fim( FAIXA** top,char nome[255] )
 {
-    FAIXA* p; 
-    FAIXA* ant;           // ponteiros auxiliares para percorrer a lista 
-/*
-   int codigo;
-   int quantidade;
-   char nome[255];
-   struct topdez* prox;
-*/
-    FAIXA* no =  ( FAIXA * ) malloc ( sizeof( FAIXA ) ); // aloca novo espaco em memoria
-    if( no != NULL ){                                    // verifica se conseguiu alocar memoria para o novo registro
-			strcpy(no->nome,nome);
-			no->quantidade++;
-            p = *top;                                      // possiciona ponteiro auxiliar no inicio para percorrer a lista 
-			
-            while( ( p != NULL ) && ( no->quantidade > p->quantidade ) ){ //faz o laco ate achar a posicao ou o final da lista (no caso em que e a maior codigo)
-                  ant = p;                         // guarda a posicao do anterior, para fazer ajuste dos ponteiros ao final
-                  p   = p->prox;                   // percorre a lista
-            } // fim while( ( p != NULL ) && ( no->info.codigo > p->info.codigo ) )
+    FAIXA* p; // ponteiro auxiliar
 
-            if( p == *top )      // verifica se auxiliar aponta para o inicio da lista
-                *top = no;       // inicio da lista aponta para novo registro
-            else   
-                ant->prox = no;// ajuste de ponteiro para inserir na posicao ordenada
-            no->prox = p;      // ajuste de ponteiro, inserido de forma ordenada por codigo
-    } // fim if( no != NULL )
+    FAIXA* no =  ( FAIXA * ) malloc ( sizeof( FAIXA ) ); // aloca novo espaco em memoria
+    if( no != NULL ){                            // verifica se conseguiu alocar memoria para o novo registro
+			strcpy((*top)->nome,nome);
+			(*top)->quantidade = 1;
+             if( *top == NULL )                    // lista vazia
+                 *top = no;                         // insere o primeiro registro
+             else {
+                  p = *top;                        // percorre a lista até encontrar o ultimo registro
+                  while( p->prox != NULL )
+                        p = p->prox;
+                  p->prox = no;                  // ultimo aponta para o novo registro
+                  printf( "\n Registro incluido!" );                  
+                  } // fim if ( *l == NULL ) 
+        } // fim if( no != NULL )
     else
-    	printf("Não tem mais memória.");
+        printf( "\n Lista cheia!" );
 }
 
 void escolher_musica( CD** cd,FAIXA** top){
@@ -258,7 +250,6 @@ void escolher_musica( CD** cd,FAIXA** top){
 	CD* no;
 	FAIXA* p;
 	char nomeFaixa[255];
-	
 	
 	primeira_escolha(*cd);
 	printf("\nQual o código do cd: ");
@@ -272,7 +263,7 @@ void escolher_musica( CD** cd,FAIXA** top){
 		if(val<=numeroDeMusicas && val>=0){
 			printf("Tocando musica...");
 			printf( "\n Faixa: %s", no->matrizDeFaixas[val]);
-			strcat(nomeFaixa,no->titulo);
+			strcpy(nomeFaixa,no->titulo);
 			strcat(nomeFaixa," - ");
 			strcat(nomeFaixa,no->matrizDeFaixas[val]);
 			
@@ -282,7 +273,17 @@ void escolher_musica( CD** cd,FAIXA** top){
 				strcpy((*top)->nome,nomeFaixa);
 				(*top)->quantidade = 1;
 			}else{
-				inclui_ordenado(top,nomeFaixa);
+				p = *top;
+				while(p!=NULL){
+					if(strcmp(p->nome,nomeFaixa)!=0)
+						p = p->prox;
+					else{
+						p->quantidade++;
+						break;
+					}
+				}
+				if(p==NULL)
+					inclui_fim(top,nomeFaixa);
 			}
 		}else
 			printf("Álbum não contem esta faixa");
@@ -293,19 +294,51 @@ void escolher_musica( CD** cd,FAIXA** top){
 
 void mostrar_top  ( FAIXA* top ){			//Função para mostrar todos os cds e as faixas
 	fflush( stdin );
-      if( top == NULL )					//Se for vazia, imprime lista vazia
-        printf( "\n Lista vazia!" );
-    else {
-         printf("\n\n ---- TOP DEZ  ---- ");
-         while( top != NULL ){    // ponteiro auxiliar para a lista
-                printf( "\n Titulo..: %s", top->nome);  //Mostra o título da música
-				
-                top = top->prox;  // aponta para o proximo registro da lista
-         }
-    }
-    getchar();
+	if( top == NULL )					//Se for vazia, imprime lista vazia
+		printf( "\n Lista vazia!" );
+	else {
+		printf("\n\n ---- TOP DEZ  ---- ");
+		while( top != NULL ){    // ponteiro auxiliar para a lista
+			printf( "\n Titulo..: %s ", top->nome);  //Mostra o título da música
+			printf( "Quantidade..: %d", top->quantidade);  //Mostra quantidade de vezes tocado
+			top = top->prox;  // aponta para o proximo registro da lista
+		}
+	}
+	getchar();
 }
 
+void ordena_selecao( FAIXA** top )
+{
+    FAIXA* p;
+    FAIXA* q; 
+    FAIXA* menor;
+    FAIXA* aux;
+
+	if( *top == NULL )
+	    printf( "\n Lista vazia!" );
+	else {
+		p=*top;
+	    while(p->prox!=NULL){
+	    	menor = p;
+	    	q=p->prox;
+	    	while(q!=NULL){
+	    		
+	    		if(q->quantidade < menor->quantidade)
+	    			menor = q;
+	    		q=q->prox;
+	    	}
+	    	if(p != menor){
+	    		strcpy(aux->nome,menor->nome);
+	    		aux->quantidade = menor->quantidade;
+	    		strcpy(menor->nome,p->nome);
+	    		menor->quantidade = p->quantidade;
+	    		strcpy(p->nome,aux->nome);
+	    		p->quantidade = aux->quantidade;
+	    	}
+	    	p=p->prox;
+	    }
+	}
+}
 
 
 
