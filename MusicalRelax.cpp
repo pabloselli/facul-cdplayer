@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
-#define numeroDeMusicas 2
+#define numeroDeMusicas 9
 // Registro para o top dez
 typedef struct topdez {
        int codigo;
@@ -74,11 +74,9 @@ int main(void){
 				mostrar_cds( cd );
 				break;
 			case 5:
-				mostrar_top( topdez );
-				break;
-			case 6:
 				ordena_lista( &topdez );
 				inverte( &topdez );
+				mostrar_top( topdez );
 				break;
 			case 0:
 				exit(1);
