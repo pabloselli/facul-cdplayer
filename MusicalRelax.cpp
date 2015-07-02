@@ -77,8 +77,8 @@ int main(void){
 				mostrar_top( topdez );
 				break;
 			case 6:
-				//inverte( &topdez );
 				ordena_lista( &topdez );
+				inverte( &topdez );
 				break;
 			case 0:
 				exit(1);
@@ -270,9 +270,7 @@ void escolher_musica( CD** cd,FAIXA** top){
 			strcpy(nomeFaixa,no->titulo);
 			strcat(nomeFaixa," - ");
 			strcat(nomeFaixa,no->matrizDeFaixas[val]);
-			
-			printf("\n Nome faixa: %s\n",nomeFaixa);
-			
+
 			if(top == NULL){
 				strcpy((*top)->nome,nomeFaixa);
 				(*top)->quantidade = 1;
@@ -305,16 +303,12 @@ void mostrar_top  ( FAIXA* top ){			//Função para mostrar todos os cds e as faix
 		printf( "\n Lista vazia!" );
 	else {
 		printf("\n\n ---- TOP DEZ  ---- ");
-		while( top != NULL ){    // ponteiro auxiliar para a lista
+		while( top != NULL || qtt>=10 ){    // ponteiro auxiliar para a lista
 			printf( "\n Titulo..: %s ", top->nome);  //Mostra o título da música
 			printf( "Quantidade..: %d", top->quantidade);  //Mostra quantidade de vezes tocado
 			printf(" Tocando...");
 			top = top->prox;  // aponta para o proximo registro da lista
 		}
-		
-		qtt = conta(&top);
-		printf("\nQuantidade de nodos: %d",qtt);
-		
 	}
 	getchar();
 }
@@ -355,25 +349,21 @@ void inverte( FAIXA** top )
 {
     FAIXA* p; 
     FAIXA* q;           // ponteiros auxiliares para percorrer a lista 
-    FAIXA* t;           // ponteiros auxiliares para percorrer a lista 
+	FAIXA* t;           // ponteiros auxiliares para percorrer a lista 
     
     if( *top == NULL )    // verifica se a lista esta vazia 
         printf( "\n Lista vazia!" );
     else {
          p = *top;        // inicializa os ponteiros auxiliares
          if( p->prox == NULL ) // verifica se so tem um elemento
-        	printf( "\n Lista com apenas 1 elemento!" );
+             printf( "\n Lista com apenas 1 elemento!" );
          else {
               q = p->prox;        // inicializa os ponteiros auxiliares
               t = q->prox;
               while( t != NULL ){ // inverte o sentido do apontamento de cada registro, ate chegar ao ultimo
                      q->prox = p;
-                     strcpy(p->nome,q->nome);
-                     p->quantidade = q->quantidade;
-                     
-                     strcpy(p->nome,t->nome);
-                     p->quantidade = t->quantidade;
-                     
+                     p = q;       // anda pela lista
+                     q = t;
                      t = t->prox;
               } // while( t != NULL )
               q->prox = p;        // altera o ponteiros do último
@@ -383,21 +373,6 @@ void inverte( FAIXA** top )
               printf( "\n Lista invertida!" );
          } // if( p->prox == NULL )
     } // if( *l == NULL ) 
-}
-
-int conta(FAIXA** top){
-	FAIXA* aux;
-	int i=0;
-	if(*top==NULL)
-		return i;
-	else{
-		aux = *top;
-		while(aux!=NULL){
-			i++;
-			aux = aux->prox;
-		}
-		return i;
-	}		
 }
 
 
