@@ -36,8 +36,9 @@ void	primeira_escolha( CD aux );
 void	segunda_escolha( CD aux );
 void    inclui_ordenado( FAIXA** top,char nome );
 void	mostrar_top	   (FAIXA* top);
-void 	ordena_selecao( FAIXA** top );
+void    ordena_lista( FAIXA** top );
 void 	inverte( FAIXA** top );
+int 	conta(FAIXA** top);
 
 int main(void){
 	setlocale(LC_ALL, "Portuguese");
@@ -67,7 +68,6 @@ int main(void){
 				exclui_cd( &cd );
 				break;
 			case 3:
-				//verSeCadastrou( cd );
 				escolher_musica( &cd, &topdez);
 				break;
 			case 4:
@@ -77,8 +77,8 @@ int main(void){
 				mostrar_top( topdez );
 				break;
 			case 6:
-				ordena_selecao( &topdez );
-				inverte( &topdez );
+				//inverte( &topdez );
+				ordena_lista( &topdez );
 				break;
 			case 0:
 				exit(1);
@@ -276,7 +276,6 @@ void escolher_musica( CD** cd,FAIXA** top){
 			if(top == NULL){
 				strcpy((*top)->nome,nomeFaixa);
 				(*top)->quantidade = 1;
-				printf( "\n Registro incluido!" );
 			}else{
 				p = *top;
 				while(p!=NULL){
@@ -299,6 +298,9 @@ void escolher_musica( CD** cd,FAIXA** top){
 
 void mostrar_top  ( FAIXA* top ){			//Função para mostrar todos os cds e as faixas
 	fflush( stdin );
+	
+	int qtt = 0;
+	
 	if( top == NULL )					//Se for vazia, imprime lista vazia
 		printf( "\n Lista vazia!" );
 	else {
@@ -309,40 +311,12 @@ void mostrar_top  ( FAIXA* top ){			//Função para mostrar todos os cds e as faix
 			printf(" Tocando...");
 			top = top->prox;  // aponta para o proximo registro da lista
 		}
+		
+		qtt = conta(&top);
+		printf("\nQuantidade de nodos: %d",qtt);
+		
 	}
 	getchar();
-}
-
-void ordena_selecao( FAIXA** top )
-{
-    FAIXA* p;
-    FAIXA* q; 
-    FAIXA* menor;
-    FAIXA* aux;
-
-	if( *top == NULL )
-	    printf( "\n Lista vazia!" );
-	else {
-		p=*top;
-	    while(p->prox!=NULL){
-	    	menor = p;
-	    	q=p->prox;
-	    	while(q!=NULL){
-	    		if(q->quantidade < menor->quantidade)
-	    			menor = q;
-	    		q=q->prox;
-	    	}
-	    	if(p != menor){
-	    		strcpy(aux->nome,menor->nome);
-	    		aux->quantidade = menor->quantidade;
-	    		strcpy(menor->nome,p->nome);
-	    		menor->quantidade = p->quantidade;
-	    		strcpy(p->nome,aux->nome);
-	    		p->quantidade = aux->quantidade;
-	    	}
-	    	p=p->prox;
-	    }
-	}
 }
 
 void ordena_lista( FAIXA** top )
@@ -411,6 +385,20 @@ void inverte( FAIXA** top )
     } // if( *l == NULL ) 
 }
 
+int conta(FAIXA** top){
+	FAIXA* aux;
+	int i=0;
+	if(*top==NULL)
+		return i;
+	else{
+		aux = *top;
+		while(aux!=NULL){
+			i++;
+			aux = aux->prox;
+		}
+		return i;
+	}		
+}
 
 
 
